@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Success Overlay</title>
+  <link rel="stylesheet" href="css/success-display.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 10px;
+      cursor: pointer;
+      background: #0366d6;
+      color: white;
+      border: none;
+      border-radius: 6px;
+    }
+    button:hover {
+      background: #0256c7;
+    }
+  </style>
+</head>
+<body>
+  <h1>Success Overlay Test</h1>
+  <p>Click the buttons below to test the success overlay animation:</p>
+  
+  <button onclick="showSuccessOverlay(10, 0)">Test Success (10 files)</button>
+  <button onclick="showSuccessOverlay(8, 2)">Test Partial Success (8/10)</button>
+  <button onclick="showSuccessOverlay(0, 5)">Test Failure (0/5)</button>
+  
+  <script>
+    function showSuccessOverlay(successCount, errorCount) {
+      // Create overlay if it doesn't exist
+      let overlay = document.querySelector('.success-overlay');
+      if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.className = 'success-overlay';
+        
+        const content = document.createElement('div');
+        content.className = 'success-content';
+        
+        const icon = document.createElement('div');
+        icon.className = 'success-icon';
+        icon.textContent = successCount > 0 ? '✓' : '✗';
+        
+        const title = document.createElement('h2');
+        title.textContent = successCount > 0 ? 'Upload Complete!' : 'Upload Failed';
+        
+        const message = document.createElement('p');
+        const totalFiles = successCount + errorCount;
+        if (errorCount === 0) {
+          message.textContent = `Successfully uploaded ${successCount} file${successCount !== 1 ? 's' : ''}`;
+        } else if (successCount === 0) {
+          message.textContent = `Failed to upload ${errorCount} file${errorCount !== 1 ? 's' : ''}`;
+        } else {
+          message.textContent = `Uploaded ${successCount} of ${totalFiles} files successfully`;
+        }
+        
+        content.appendChild(icon);
+        content.appendChild(title);
+        content.appendChild(message);
+        overlay.appendChild(content);
+        document.body.appendChild(overlay);
+      }
+      
+      // Show the overlay
+      setTimeout(() => {
+        overlay.classList.add('show');
+      }, 10);
+      
+      // Hide the overlay after 2 seconds
+      setTimeout(() => {
+        overlay.classList.remove('show');
+        setTimeout(() => {
+          if (overlay.parentNode) {
+            overlay.parentNode.removeChild(overlay);
+          }
+        }, 300); // Wait for fade animation
+      }, 1500);
+    }
+  </script>
+</body>
+</html>
